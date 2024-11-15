@@ -15,25 +15,17 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install NASM
-      run: sudo apt-get update && sudo apt-get install -y nasm
-
-    # Uncomment the following section if you need Bochs or other tools
-    #- name: Install Bochs
-    #  run: sudo apt-get install -y bochs bochs-sdl bochs-x
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y nasm qemu-system-x86
 
     - name: Build Assembly Code
-      run: |
-        # Adjust the following command based on your build process
-        nasm -f bin boot.asm -o boot.bin
+      run: nasm -f bin boot.asm -o boot.bin
 
-    - name: Run Tests
+    - name: Run in QEMU
       run: |
-        # If you have tests, include commands to run them here
-        # For example, you might run your binary in an emulator
-        # bochs -q -f bochsrc.txt
+        # Run the binary in QEMU for a short time
+        timeout 5 qemu-system-x86_64 -drive format=raw,file=boot.bin -nographic
 
-    # Optional: Upload artifacts (e.g., built binaries)
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
