@@ -79,7 +79,10 @@ print:
 msg: db 'I hate assembly!', 0
 
 ; Pad the rest of the sector with zeros
-times 510 - ($ - $$) db 0
+;times 510 - ($ - $$) db 0
 
 ; Boot sector signature
+;dw 0xAA55
+
+times 510 - ($ - $$) db 0
 dw 0xAA55
